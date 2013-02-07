@@ -1,3 +1,5 @@
+Functional tests for http://econsensus.org
+
 Setup
 -----
 * pip install pytest (http://pytest.org/)
