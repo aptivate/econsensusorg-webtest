@@ -1,81 +1,32 @@
-#!/usr/bin/env python
-import optparse
-import sys
-import unittest 
-from selenium import webdriver
-
-class TestEditDiscussion(unittest.TestCase):
-
-    def setUp(self):
-        print opts
-        self.username = opts.username
-        self.password = opts.password
-        self.remote_url = opts.remoteurl
-        self.base_url = opts.baseurl
-
-        if self.remote_url: 
-            caps = webdriver.DesiredCapabilities.FIREFOX
-            caps['platform'] = "Linux"
-            caps['version'] = "19"
-            caps['name'] = 'Testing Econsensus Edit Discussions'
-            self.driver = webdriver.Remote(
-                desired_capabilities = caps,
-                command_executor = self.remote_url
-            )
-        else:
-            self.driver = webdriver.Firefox()
-
-        self.driver.implicitly_wait(30)
+from pages.base import Login, Organizations
+from pages.decision_detail import DecisionDetail
+from pages.decision_list import DiscussionList
 
 
-    def test_edit_discussion(self):
-    
-        driver = self.driver
+def test_edit_discussion(driver, server_credentials):
+    # Login
+    login = Login(driver, server_credentials)
+    login.login_with_credentials()
 
-        driver.get(self.base_url)
+    # Get Organization
+    orgslug = Organizations(driver).get_all_organizations_slugs()[0]
 
-        # Enter the credentials
-        usernameinput = driver.find_element_by_name("username")
-        passwordinput = driver.find_element_by_name("password")
+    # Get DiscussionList
+    discussionlist = DiscussionList(driver, orgslug)
 
-        usernameinput.send_keys(self.username)
-        passwordinput.send_keys(self.password)
+    # TODO Make robust if there are no items in page
+    id_links = discussionlist.get_item_links_in_page()
 
-        # This is an example of not robust - as soon as another button gets added the wrong one could get clicked
-        loginbutton = driver.find_element_by_class_name("button") 
-        loginbutton.click()
+    # Click the first link to get to a detail page
+    id_links[0].click()
 
-        driver.find_element_by_partial_link_text('Logout') # Helps the test wait until user is actually logged in  
-        assert 'Organization List' in driver.title
-       
-        smurforg = driver.find_element_by_partial_link_text("Smurfs")
-        org_slug = smurforg.get_attribute("href").split('/')[3]
-        discussion_tab_url = "/".join([self.base_url, org_slug, 'item/list/discussion/'])
-        # Go to discussion tab
-        driver.get(discussion_tab_url)
-        # Click on a specific discussion 
-        discussionlink = driver.find_elements_by_class_name("id")
-        # 1th to ignore header .id
-        discussionlink[1].find_element_by_xpath("./a").click()
-        assert driver.find_element_by_css_selector(".page_title.discussion")
-        # Edit it
-        edit_link = driver.find_element_by_css_selector(".controls>.edit")
-        edit_link.click()
-        assert driver.find_element_by_id("id_description").tag_name == 'textarea'
+    # Edit it
+    discussion_page = DecisionDetail(driver)
+    discussion_page.edit_description()
 
-    def tearDown(self):
-        if self.remote_url:
-            print("Link to your job: https://saucelabs.com/jobs/%s" % self.driver.session_id)
-        self.driver.quit()
+    # TODO Re-factor using context manager
+    expected = driver.find_element_by_id("id_description").tag_name == 'textarea'
 
-if __name__ == "__main__":
-    parser = optparse.OptionParser()
-    parser.add_option('--username')
-    parser.add_option('--password')
-    parser.add_option('--baseurl')
-    parser.add_option('--remoteurl', help='Supply remote url to run on saucelabs')
-    (opts, args) = parser.parse_args()
-    print opts
-    sys.argv[1:] = args
-    unittest.main()
-
+    assert expected
+    if expected:
+        driver.passed = True
