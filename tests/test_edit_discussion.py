@@ -24,9 +24,6 @@ def test_edit_discussion(driver, server_credentials):
     discussion_page = DecisionDetail(driver)
     discussion_page.edit_description()
 
-    # TODO Re-factor using context manager
-    expected = driver.find_element_by_id("id_description").tag_name == 'textarea'
-
-    assert expected
-    if expected:
-        driver.passed = True
+    # TODO This fails locally, but reports 'passed' to saucelabs
+    with discussion_page.assert_element_visible():
+        assert driver.find_element_by_id("id_description").tag_name == 'textea'

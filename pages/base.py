@@ -36,6 +36,8 @@ class Login(Base):
         loginbutton = self.driver.find_element_by_class_name("button")
         loginbutton.click()
 
+        self.assert_is_logged_in()
+
     def assert_is_logged_in(self):
         # Wait for Logout item to appear so you know you're logged in
         with self.assert_element_visible():
