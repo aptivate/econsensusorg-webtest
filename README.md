@@ -14,11 +14,17 @@ To run the tests
 ----------------
 
 The following options are available
+
 --username (defaults to admin) - the username to login to econsensus with
+
 --password (defaults to admin) - the password to login to econsensus with
+
 --baseurl (defaults to http://localhost:8000) - location of econsensus
+
 --sauce_username - if you wish to run tests on saucelabs, supply username
+
 --sauce_api - if you wish to run tests on saucelabs, supple api key
+
 --timeout (defaults to 30) - the selenium implicit timeout
 
 Assuming you have firefox on your local machine, and want to run locally:
