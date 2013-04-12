@@ -66,14 +66,19 @@ Examples:
 Troubleshooting
 ---------------
 
-If you get an optparse.OptionConflictError on 'baseurl', you probably have pytest-mozwebqa installed - check this by doing:
+If you get an optparse.OptionConflictError on 'baseurl', you probably have 
+pytest-mozwebqa installed - you can check this by doing:
 
     pip freeze | grep pytest-mozwebqa
 
-Try pip uninstalling it, and running the test again. If you still get the error, delete the corresponding package file and directory (to find their location, pip install again, then import pytest-mozwebqa in a python session, and then call __path__ on it). It seems that pip uninstall doesn't actually remove the files, just prevents importing them from python, and py.test must be getting round that somehow.
+Try pip uninstalling it, and running the test again. If you still get the error, 
+you'll need to delete the corresponding package file and directory. It seems 
+that pip uninstall doesn't actually remove the files, just prevents importing 
+them from python, and py.test must be getting round that somehow.
 
 TODO
 ----
 
-* Figure out why saucelabs dashboard reports "Pass" result even when there's a failure/error (as reported to stdout).
+* Figure out why saucelabs dashboard reports "Pass" result even when there's a 
+failure/error (as reported to stdout).
 
