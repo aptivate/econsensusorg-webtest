@@ -23,7 +23,7 @@ The following options are available
 
 --sauce_username - if you wish to run tests on saucelabs, supply username
 
---sauce_api - if you wish to run tests on saucelabs, supple api key
+--sauce_api - if you wish to run tests on saucelabs, supply api key
 
 --timeout (defaults to 30) - the selenium implicit timeout
 
