@@ -29,3 +29,12 @@ To run on saucelabs server:
 
     py.test --username <username> -- password <password> --baseurl <econsensus url e.g. http://econsensus.stage.aptivate.org> --sauce_username <saucelabs_username> --sauce_api <saucelabs_api_key>
 
+Troubleshooting
+---------------
+
+If you get an optparse.OptionConflictError on 'baseurl', you probably have pytest-mozwebqa installed - check this by doing:
+
+    pip freeze | grep pytest-mozwebqa
+
+Try pip uninstalling it, and running the test again. If you still get the error, delete the corresponding package file and directory (to find their location, pip install again, then import pytest-mozwebqa in a python session, and then call __path__ on it). It seems that pip uninstall doesn't actually remove the files, just prevents importing them from python, and py.test must be getting round that somehow.
+
