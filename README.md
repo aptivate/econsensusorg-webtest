@@ -27,7 +27,7 @@ The following options are available
 
 --timeout (defaults to 30) - the selenium implicit timeout
 
-Assuming you have firefox on your local machine, and want to run locally:
+If you want to run tests locally, you must have Firefox installed, and your econsensus server must be running, then do:
 
     py.test --username <username> --password <password>
 
