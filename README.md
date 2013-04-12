@@ -1,5 +1,12 @@
-These selenium tests can be run against your local instance or against a hosted
-version of econsensus. Use selenium locally or saucelabs (www.saucelabs.org).
+These pytest-based user interface tests are invoked locally to use:
+1. local selenium and Firefox to test against a local or hosted instance of 
+econsensus, or 
+1. saucelabs.com to test against a hosted version of econsensus 
+We can therefore use them to test:
+* a local instance of econsensus running via django dev server
+* econsensus.stage.aptivate.org from a development machine
+* econsensus.stage.aptivate.org via saucelabs (intended for
+invocation by Jenkins)
 
 Tests are currently only setup to run on Firefox. Edit conftest.py to change
 this.
@@ -8,32 +15,53 @@ Setup
 -----
 
     pip install pytest
+
+If you want to run the tests locally, ensure you have Firefox installed and:
+
     pip install selenium
 
 To run the tests
 ----------------
 
-The following options are available
+py.test [OPTIONS] [FILE...]
 
---username (defaults to admin) - the username to login to econsensus with
+py.test will discover tests to run as described at 
+http://pytest.org/latest/goodpractises.html#test-discovery, or you can 
+specify a list of directories and/or filenames to run a smaller set of tests.
 
---password (defaults to admin) - the password to login to econsensus with
+The following OPTIONS are available:
 
---baseurl (defaults to http://localhost:8000) - location of econsensus
+--baseurl - location of econsensus (defaults to http://localhost:8000)
 
---sauce_username - if you wish to run tests on saucelabs, supply username
+--username - econsensus username (defaults to "admin")
 
---sauce_api - if you wish to run tests on saucelabs, supply api key
+--password - econsensus password (defaults to "admin")
 
---timeout (defaults to 30) - the selenium implicit timeout
+--sauce_username - saucelabs username, if using
 
-If you want to run tests locally, you must have Firefox installed, and your econsensus server must be running, then do:
+--sauce_api - saucelabs api key, if using
 
-    py.test --username <username> --password <password>
+--timeout - selenium implicit timeout (defaults to 30)
 
-To run on saucelabs server:
+If you want to run tests locally against a local or remote instance of 
+econsensus, you must have Firefox and selenium installed. Results will be 
+reported via stdout.
 
-    py.test --username <username> -- password <password> --baseurl <econsensus url e.g. http://econsensus.stage.aptivate.org> --sauce_username <saucelabs_username> --sauce_api <saucelabs_api_key>
+Examples:
+    py.test
+    py.test tests/test_login.py
+    py.test --password my_local_password_is_not_admin
+    py.test --baseurl http://econsensus.stage.aptivate.org --password staging_password
+
+To run on saucelabs server against a hosted instance of econsensus, you'll need 
+the username and api key for our saucelabs account (see the wiki). Results will 
+be reported via stdout and on the [saucelabs dashboard](https://saucelabs.com/login), 
+which will also include a video of each test run.
+
+Examples:
+    py.test --baseurl http://econsensus.stage.aptivate.org --username admin -- password staging_password --sauce_username saucelabs_username --sauce_api saucelabs_api_key
+    py.test --baseurl http://econsensus.stage.aptivate.org --username admin -- password staging_password --sauce_username saucelabs_username --sauce_api saucelabs_api_key tests/test_login.py
+
 
 Troubleshooting
 ---------------
@@ -43,4 +71,9 @@ If you get an optparse.OptionConflictError on 'baseurl', you probably have pytes
     pip freeze | grep pytest-mozwebqa
 
 Try pip uninstalling it, and running the test again. If you still get the error, delete the corresponding package file and directory (to find their location, pip install again, then import pytest-mozwebqa in a python session, and then call __path__ on it). It seems that pip uninstall doesn't actually remove the files, just prevents importing them from python, and py.test must be getting round that somehow.
+
+TODO
+----
+
+* Figure out why saucelabs dashboard reports "Pass" result even when there's a failure/error (as reported to stdout).
 
