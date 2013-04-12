@@ -52,17 +52,19 @@ econsensus, you must have Firefox and selenium installed. Results will be
 reported via stdout.
 
 Examples:
+
     py.test
     py.test tests/test_login.py
     py.test --password my_local_password_is_not_admin
     py.test --baseurl http://econsensus.stage.aptivate.org --password staging_password
 
-To run on saucelabs server against a hosted instance of econsensus, you'll need 
+If you want to run on saucelabs server against a hosted instance of econsensus, you'll need 
 the username and api key for our saucelabs account (see the wiki). Results will 
 be reported via stdout and on the [saucelabs dashboard](https://saucelabs.com/login), 
 which will also include a video of each test run.
 
 Examples:
+
     py.test --baseurl http://econsensus.stage.aptivate.org --username admin -- password staging_password --sauce_username saucelabs_username --sauce_api saucelabs_api_key
     py.test --baseurl http://econsensus.stage.aptivate.org --username admin -- password staging_password --sauce_username saucelabs_username --sauce_api saucelabs_api_key tests/test_login.py
 
