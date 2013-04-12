@@ -1,7 +1,11 @@
+User Interface testing for econsensus
+=====================================
 These pytest-based user interface tests are invoked locally to use:
+
 1. local selenium and Firefox to test against a local or hosted instance of 
 econsensus, or 
 1. saucelabs.com to test against a hosted version of econsensus 
+
 We can therefore use them to test:
 * a local instance of econsensus running via django dev server
 * econsensus.stage.aptivate.org from a development machine
@@ -25,8 +29,8 @@ To run the tests
 
 py.test [OPTIONS] [FILE...]
 
-py.test will discover tests to run as described at 
-http://pytest.org/latest/goodpractises.html#test-discovery, or you can 
+py.test will discover tests to run as described [here](
+http://pytest.org/latest/goodpractises.html#test-discovery), or you can 
 specify a list of directories and/or filenames to run a smaller set of tests.
 
 The following OPTIONS are available:
@@ -48,17 +52,19 @@ econsensus, you must have Firefox and selenium installed. Results will be
 reported via stdout.
 
 Examples:
+
     py.test
     py.test tests/test_login.py
     py.test --password my_local_password_is_not_admin
     py.test --baseurl http://econsensus.stage.aptivate.org --password staging_password
 
-To run on saucelabs server against a hosted instance of econsensus, you'll need 
+If you want to run on saucelabs server against a hosted instance of econsensus, you'll need 
 the username and api key for our saucelabs account (see the wiki). Results will 
 be reported via stdout and on the [saucelabs dashboard](https://saucelabs.com/login), 
 which will also include a video of each test run.
 
 Examples:
+
     py.test --baseurl http://econsensus.stage.aptivate.org --username admin -- password staging_password --sauce_username saucelabs_username --sauce_api saucelabs_api_key
     py.test --baseurl http://econsensus.stage.aptivate.org --username admin -- password staging_password --sauce_username saucelabs_username --sauce_api saucelabs_api_key tests/test_login.py
 
