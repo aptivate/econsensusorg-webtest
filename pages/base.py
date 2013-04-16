@@ -9,9 +9,7 @@ class Base:
     def assert_element_visible(self):
         try:
             yield
-            self.driver.passed = True
         except (NoSuchElementException):
-            self.driver.passed = False
             pytest.fail("Element Not Visible")
 
 
@@ -42,7 +40,7 @@ class Login(Base):
         # Wait for Logout item to appear so you know you're logged in
         with self.assert_element_visible():
             logout_element = self.driver.find_element_by_partial_link_text('Logout')
-        return self.driver.passed
+
 
 
 class Organizations:

@@ -62,7 +62,7 @@ def driver(request):
         caps = webdriver.DesiredCapabilities.FIREFOX
         caps['platform'] = "Linux"
         caps['version'] = "19"
-        caps['name'] = 'Econsensus Test Suite on Firefox'
+        caps['name'] = 'Econsensus: %s' % request.node.nodeid
         command_executor = "http://%s:%s@ondemand.saucelabs.com:80/wd/hub" % (sauce_username, sauce_api)
         driver = webdriver.Remote(
             desired_capabilities=caps,
@@ -75,10 +75,10 @@ def driver(request):
 
     def tearDown():
         if sauce_username and sauce_api:
-            if driver.passed:
-                set_test_status(driver.session_id, passed=True)
-            else:
+            if request.node.rep_call.failed:
                 set_test_status(driver.session_id, passed=False)
+            if request.node.rep_call.passed:
+                set_test_status(driver.session_id, passed=True)
             print("Link to your job: https://saucelabs.com/jobs/%s" % driver.session_id)
         driver.quit()
     request.addfinalizer(tearDown)
@@ -93,3 +93,18 @@ def server_credentials(request):
     server_credentials['username'] = request.config.option.username
     server_credentials['password'] = request.config.option.password
     return server_credentials
+
+
+@pytest.mark.tryfirst
+# Taken from:
+# http://pytest.org/latest/example/simple.html#making-\
+#                                test-result-information-available-in-fixtures
+def pytest_runtest_makereport(item, call, __multicall__):
+    # execute all other hooks to obtain the report object
+    rep = __multicall__.execute()
+
+    # set an report attribute for each phase of a call, which can
+    # be "setup", "call", "teardown"
+
+    setattr(item, "rep_" + rep.when, rep)
+    return rep
