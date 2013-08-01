@@ -24,6 +24,6 @@ def test_edit_discussion(driver, server_credentials):
     discussion_page = DecisionDetail(driver)
     discussion_page.edit_description()
 
-    # TODO This fails locally, but reports 'passed' to saucelabs
+    # Very cursory check that form is present
     with discussion_page.assert_element_visible():
-        assert driver.find_element_by_id("id_description").tag_name == 'textea'
+        assert driver.find_element_by_id("id_description").tag_name == 'textarea'
