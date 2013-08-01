@@ -65,8 +65,8 @@ which will also include a video of each test run.
 
 Examples:
 
-    py.test --baseurl http://econsensus.stage.aptivate.org --username admin -- password staging_password --sauce_username saucelabs_username --sauce_api saucelabs_api_key
-    py.test --baseurl http://econsensus.stage.aptivate.org --username admin -- password staging_password --sauce_username saucelabs_username --sauce_api saucelabs_api_key tests/test_login.py
+    py.test --baseurl http://econsensus.stage.aptivate.org --username admin --password staging_password --sauce_username saucelabs_username --sauce_api saucelabs_api_key
+    py.test --baseurl http://econsensus.stage.aptivate.org --username admin --password staging_password --sauce_username saucelabs_username --sauce_api saucelabs_api_key tests/test_login.py
 
 
 Troubleshooting
