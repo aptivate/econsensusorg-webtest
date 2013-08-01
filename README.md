@@ -81,10 +81,3 @@ Try pip uninstalling it, and running the test again. If you still get the error,
 you'll need to delete the corresponding package file and directory. It seems 
 that pip uninstall doesn't actually remove the files, just prevents importing 
 them from python, and py.test must be getting round that somehow.
-
-TODO
-----
-
-* Figure out why saucelabs dashboard reports "Pass" result even when there's a 
-failure/error (as reported to stdout).
-
